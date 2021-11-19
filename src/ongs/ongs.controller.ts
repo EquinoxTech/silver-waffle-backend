@@ -8,8 +8,8 @@ export class OngsController {
   constructor(private readonly ongsService: OngsService) {}
 
   @Post()
-  create(@Body() createOngDto: CreateOngDto) {
-    return this.ongsService.create(createOngDto);
+  create(@Body() newOng: CreateOngDto) {
+    return this.ongsService.create(newOng);
   }
 
   @Get()

@@ -1,15 +1,28 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { CreateOngDto } from './dto/create-ong.dto';
 import { UpdateOngDto } from './dto/update-ong.dto';
-
+import { Ong } from './entities/ong.entity';
+import { Repository } from 'typeorm';
+import { Point } from 'geojson';
 @Injectable()
 export class OngsService {
-  create(createOngDto: CreateOngDto) {
-    return 'This action adds a new ong';
+  constructor(@InjectRepository(Ong) private ongRepository: Repository<Ong>) {}
+
+  create(newOng: CreateOngDto) {
+    const long = newOng.location[0];
+    const lat = newOng.location[1];
+
+    const pointObject: Point = {
+      type: 'Point',
+      coordinates: [long, lat],
+    };
+    newOng.location = pointObject;
+    return this.ongRepository.create({ newOng });
   }
 
   findAll() {
-    return `This action returns all ongs`;
+    return this.ongRepository.find();
   }
 
   findOne(id: number) {
