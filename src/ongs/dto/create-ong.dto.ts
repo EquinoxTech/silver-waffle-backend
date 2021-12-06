@@ -1,25 +1,26 @@
-import { Point } from 'geojson';
-
 export class CreateOngDto {
-  id: number;
-
-  title: string;
+  name: string;
 
   description: string;
 
-  working_hours: string;
+  type: string;
 
-  street: string;
-
-  number: number;
-
-  state: string;
-
-  city: string;
-
-  neighbourhood: string;
-
-  location: Point;
+  working_hours: {
+    start_time: Date;
+    end_time: Date;
+    days: string;
+  };
 
   responsible: string;
+
+  accepting_donations: boolean;
+
+  address: {
+    street: string;
+    neighbourhood: string;
+    state: string;
+    city: string;
+    number: number;
+    cep: number;
+  };
 }

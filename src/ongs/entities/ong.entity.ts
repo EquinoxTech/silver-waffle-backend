@@ -1,43 +1,39 @@
-import { Point } from 'geojson';
-import { Entity, PrimaryGeneratedColumn, Column, Index } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity()
 export class Ong {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('varchar')
-  title: string;
+  @Column({ unique: true })
+  name: string;
 
   @Column('text')
   description: string;
 
-  @Column('varchar')
-  working_hours: string;
+  @Column()
+  type: string;
 
-  @Column('varchar')
-  street: string;
-
-  @Column('int')
-  number: number;
-
-  @Column('varchar')
-  state: string;
-
-  @Column('varchar')
-  city: string;
-
-  @Column('varchar')
-  neighbourhood: string;
-
-  @Index({ spatial: true })
-  @Column({
-    type: 'point',
-    nullable: true,
-    srid: 4326,
-  })
-  location: Point;
+  @Column('simple-json')
+  working_hours: {
+    start_time: Date;
+    end_time: Date;
+    days: string;
+  };
 
   @Column()
   responsible: string;
+
+  @Column()
+  accepting_donations: boolean;
+
+  @Column('simple-json')
+  address: {
+    street: string;
+    neighbourhood: string;
+    state: string;
+    city: string;
+    number: number;
+    cep: number;
+  };
 }
