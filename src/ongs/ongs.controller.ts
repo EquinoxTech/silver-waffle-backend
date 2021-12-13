@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  HttpCode,
+} from '@nestjs/common';
 import { OngsService } from './ongs.service';
 import { CreateOngDto } from './dto/create-ong.dto';
 import { UpdateOngDto } from './dto/update-ong.dto';
@@ -8,8 +17,9 @@ export class OngsController {
   constructor(private readonly ongsService: OngsService) {}
 
   @Post()
-  create(@Body() createOngDto: CreateOngDto) {
-    return this.ongsService.create(createOngDto);
+  @HttpCode(201)
+  create(@Body() CreateOngDto: CreateOngDto) {
+    return this.ongsService.create(CreateOngDto);
   }
 
   @Get()
@@ -18,17 +28,19 @@ export class OngsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: number) {
     return this.ongsService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateOngDto: UpdateOngDto) {
+  @HttpCode(204)
+  update(@Param('id') id: number, @Body() updateOngDto: UpdateOngDto) {
     return this.ongsService.update(+id, updateOngDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  @HttpCode(204)
+  remove(@Param('id') id: number) {
     return this.ongsService.remove(+id);
   }
 }

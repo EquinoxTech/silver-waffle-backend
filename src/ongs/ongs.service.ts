@@ -1,26 +1,30 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { CreateOngDto } from './dto/create-ong.dto';
 import { UpdateOngDto } from './dto/update-ong.dto';
-
+import { Ong } from './entities/ong.entity';
+import { Repository } from 'typeorm';
 @Injectable()
 export class OngsService {
-  create(createOngDto: CreateOngDto) {
-    return 'This action adds a new ong';
+  constructor(@InjectRepository(Ong) private ongRepository: Repository<Ong>) {}
+
+  create(CreateOngDto: CreateOngDto) {
+    return this.ongRepository.save(CreateOngDto);
   }
 
   findAll() {
-    return `This action returns all ongs`;
+    return this.ongRepository.find();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} ong`;
+    return this.ongRepository.findOneOrFail(id);
   }
 
   update(id: number, updateOngDto: UpdateOngDto) {
-    return `This action updates a #${id} ong`;
+    return this.ongRepository.update(id, updateOngDto);
   }
 
   remove(id: number) {
-    return `This action removes a #${id} ong`;
+    return this.ongRepository.delete(id);
   }
 }
