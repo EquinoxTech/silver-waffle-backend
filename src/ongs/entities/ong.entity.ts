@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
-@Entity()
+@Entity('ongs')
 export class Ong {
   @PrimaryGeneratedColumn()
   id: number;
@@ -29,6 +29,7 @@ export class Ong {
 
   @Column('simple-json')
   address: {
+    id: number;
     street: string;
     neighbourhood: string;
     state: string;
