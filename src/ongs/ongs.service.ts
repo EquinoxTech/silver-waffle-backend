@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateOngDto } from './dto/create-ong.dto';
 import { UpdateOngDto } from './dto/update-ong.dto';
@@ -9,7 +9,9 @@ export class OngsService {
   constructor(@InjectRepository(Ong) private ongRepository: Repository<Ong>) {}
 
   create(CreateOngDto: CreateOngDto) {
-    return this.ongRepository.save(CreateOngDto);
+    return this.ongRepository
+      .save(CreateOngDto)
+      .catch(() => new BadRequestException().getResponse());
   }
 
   findAll() {
@@ -17,7 +19,7 @@ export class OngsService {
   }
 
   findOne(id: number) {
-    return this.ongRepository.findOneOrFail(id);
+    return this.ongRepository.findOne(id);
   }
 
   update(id: number, updateOngDto: UpdateOngDto) {

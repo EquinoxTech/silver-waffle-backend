@@ -6,18 +6,20 @@ import {
   Patch,
   Param,
   Delete,
+  ParseIntPipe,
+  UseInterceptors,
   HttpCode,
 } from '@nestjs/common';
 import { OngsService } from './ongs.service';
 import { CreateOngDto } from './dto/create-ong.dto';
 import { UpdateOngDto } from './dto/update-ong.dto';
+import { NotFoundIdInterceptor } from './interceptors/not.found.id.interceptor';
 
 @Controller('ongs')
 export class OngsController {
   constructor(private readonly ongsService: OngsService) {}
 
   @Post()
-  @HttpCode(201)
   create(@Body() CreateOngDto: CreateOngDto) {
     return this.ongsService.create(CreateOngDto);
   }
@@ -28,19 +30,25 @@ export class OngsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: number) {
-    return this.ongsService.findOne(+id);
+  @UseInterceptors(NotFoundIdInterceptor)
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    return await this.ongsService.findOne(+id);
   }
 
   @Patch(':id')
+  @UseInterceptors(NotFoundIdInterceptor)
   @HttpCode(204)
-  update(@Param('id') id: number, @Body() updateOngDto: UpdateOngDto) {
-    return this.ongsService.update(+id, updateOngDto);
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateOngDto: UpdateOngDto,
+  ) {
+    return await this.ongsService.update(+id, updateOngDto);
   }
 
   @Delete(':id')
+  @UseInterceptors(NotFoundIdInterceptor)
   @HttpCode(204)
-  remove(@Param('id') id: number) {
-    return this.ongsService.remove(+id);
+  async remove(@Param('id', ParseIntPipe) id: number) {
+    return await this.ongsService.remove(+id);
   }
 }
